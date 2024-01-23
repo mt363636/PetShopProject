@@ -1,0 +1,11 @@
+.d-flex {
+    justify-content: space-between;
+}
+
+.left-section {
+    align-self: flex-start;
+}
+
+.right-section {
+    align-self: flex-end;
+}

@@ -1,0 +1,54 @@
+﻿.header-section {
+    background-size: contain;
+    background-position: center;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    background-color: beige
+}
+
+.custom-btn {
+    color: goldenrod;
+    text-transform: uppercase;
+    text-decoration: none;
+    position: relative;
+}
+
+    .custom-btn::before {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 1px;
+        background-color: goldenrod;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.3s ease, height 0.3s ease;
+    }
+
+    .custom-btn:hover::before {
+        transform: scaleX(1);
+        transform-origin: left;
+        height: 2px;
+        background-color: goldenrod;
+    }
+
+body {
+    margin: 0;
+    padding: 0;
+
+}
+
+.navbar {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.custom-btn.active {
+    background-color: burlywood;
+    color: white;
+}

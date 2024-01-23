@@ -1,0 +1,74 @@
+﻿@using PetShopProject.Models
+@using static System.IO.Path
+@model IEnumerable<PetShopProject.Models.Animal>
+
+@{
+    ViewData["Title"] = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml"; 
+}
+<link rel="stylesheet" href="~/css/styles.css">
+<div class="container">
+    <h1>WELCOME 👋</h1>
+    <h5>Discover Our Highly Engaged Animals</h5>
+    <div class="row">
+        @foreach (var animal in Model)
+        {
+            <div class="col-md-6">
+                <div class="card card-azure">
+                    <img src="~/images/@(animal.PictureName)" asp-append-version="true" class="card-img-top" alt="@animal.Name">
+
+                    <div class="card-body">
+                        <h5 class="card-title">@animal.Name</h5>
+                        <p class="card-text">@animal.Description</p>
+                        <p class="card-text">Comments: @animal.Comments.Count()</p>
+
+                        <label class="show-comments" data-animal-id="@animal.AnimalId">Show top 10 Comments</label>
+
+                        <div id="comments-@animal.AnimalId" class="comments-container" style="display: none;">
+                            @foreach (var comment in animal.Comments.Take(10))
+                            {
+                                <p>@comment.CommentText</p>
+                            }
+                           
+                        </div>
+                        <a href="Catalog/DetailPage?id=@animal.AnimalId" class="animal-detail-link">
+                            View Details <span class="arrow">&#8594;</span>
+                        </a>
+
+
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="~/js/scripts.js"></script>
+<style>
+    .animal-detail-link {
+        position: relative;
+        text-decoration: none;
+        color: lightcoral; 
+        font-weight: bold;
+    }
+
+    .arrow {
+        display: inline-block;
+        transition: transform 0.3s ease;
+        margin-left: 3px; 
+    }
+
+    .animal-detail-link:hover .arrow {
+        transform: translateX(5px); 
+    }
+</style>
+
+
+
+
+
+   
+
+
+

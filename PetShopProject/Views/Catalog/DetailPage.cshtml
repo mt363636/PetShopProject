@@ -1,0 +1,96 @@
+﻿@model PetShopProject.Models.DetailViewModel
+
+@{
+    ViewData["Title"] = "Detail Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/css/CatalogStyles.css">
+<div class="container">
+    <div class="mt-4">
+        <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">Back</a>
+    </div>
+    <div class="text-center mt-4">
+        <h2>@Model.Animal.Name</h2>
+        <hr>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <img class="img-fluid" src="~/images/@(Model.Animal.PictureName)" alt="@Model.Animal.Name">
+            </div>              
+            <div class="col-md-6">
+                <p><strong>Age:</strong> @Model.Animal.Age</p>
+                <p><strong>Description:</strong> @Model.Animal.Description</p>
+                <p><strong>Category Name:</strong> @Model.AnimalCategory</p>
+            </div>
+        </div>
+    </div>
+    
+    <hr>
+    <div class="text-center mt-4">
+        <form id="commentForm" method="post">
+            <div class="text-center mt-4">
+                <span asp-validation-summary="All" class="text-danger"></span>
+            <div class="input-group mb-3">
+                <input name="AnimalId" type="hidden" value="@Model.Animal.AnimalId" />
+                <textarea id="commentMessage" name="CommentText" asp-for="CommentText" class="form-control"
+                          placeholder="Add your comments here" aria-label="Add comments" aria-describedby="basic-addon1"
+                          required maxlength="100"></textarea>
+
+                <div class="input-group-append">
+                    <button id="submitComment" class="btn btn-success" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="text-center mt-4">
+        <h4>Comments:</h4>
+        <ul id="commentsList" class="list-group">
+            @foreach (var comment in Model.AnimalComments)
+            {
+                <li class="list-group-item">@comment.CommentText</li>
+            }
+        </ul>
+    </div>
+   
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation/1.19.3/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#commentForm").submit(function (e) {
+            e.preventDefault();
+            var animalId = $("#commentForm input[name='AnimalId']").val();
+            var commentText = $("#commentMessage").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Catalog/DetailPage",
+                data: {
+                    AnimalId: animalId,
+                    CommentText: commentText
+                },
+                success: function (data) {
+                    $("#commentsList").append("<li class='list-group-item'>" + commentText + "</li>");
+                    $("#commentMessage").val("");
+                },
+                error: function () {
+                }
+            });
+        });
+    });
+
+
+        // Get the textarea element
+        var commentTextarea = document.getElementById("commentMessage");
+
+    // Add an event listener to the textarea to restrict the input length
+    commentTextarea.addEventListener("input", function () {
+        if (this.value.length > 100) {
+            this.value = this.value.substring(0, 100);
+        }
+    });
+
+
+</script>
+

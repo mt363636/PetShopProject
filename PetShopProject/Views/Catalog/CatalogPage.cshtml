@@ -1,0 +1,70 @@
+﻿@model IEnumerable<PetShopProject.Models.Animal>
+
+@{
+    ViewData["Title"] = "Catalog Page";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/css/CatalogStyles.css">
+<div class="container">
+    <div class="mt-4">
+        <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">Back</a>
+    </div>
+    <div class="text-center mt-4">
+
+        <h2>Our Catalog :)</h2>
+        <span><h4>Please pick up your category</h4></span>   <select class="category-selection">
+            @foreach (var item in ViewBag.Categories)
+            {
+                if (ViewBag.CategoryId == item.CategoryId)
+                {
+                    <option value="@item.CategoryId" selected>@item.Name</option>
+
+                }
+                else
+                {
+                    <option value="@item.CategoryId" >@item.Name</option>                   
+                }
+                
+            }
+        </select>
+    </div>
+    <hr> 
+    <!-- Card Layout -->
+    <div class="row justify-content-center">
+        @foreach (var animal in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card card-azure">
+                    <img class="card-img-top img-zoom" src="~/images/@(animal.PictureName)" alt="@animal.Name" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title">@animal.Name</h5>
+                        <a href="#" class="btn btn-outline-info btn-detail" data-animal-id="@animal.AnimalId">Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.category-selection').on('change', function () {
+            var categoryId = $(":selected").val();
+            window.location.href = '/Catalog/CatalogPage?id=' + categoryId;
+        });
+
+
+        $('.btn-detail').on('click', function (e) {
+            e.preventDefault();
+            var animalId = $(this).data('animal-id');
+            window.location.href = '/Catalog/DetailPage?id=' + animalId;
+        });
+    });
+</script>
+
+
+
+
+

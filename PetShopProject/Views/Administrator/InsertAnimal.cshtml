@@ -1,0 +1,75 @@
+﻿@model PetShopProject.Models.NewAnimalViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Add New Animal";
+}
+
+<div class="container">
+   
+
+    <h2>Add New Animal</h2>
+
+    <form asp-action="InsertAnimal" asp-controller="Administrator" method="post" enctype="multipart/form-data" onsubmit="return confirm('Are you sure you want to insert this animal?');">
+        <div class="form-group">
+            <label asp-for="AnimalName"></label>
+            <input asp-for="AnimalName" class="form-control" />
+            <span asp-validation-for="AnimalName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Age"></label>
+            <input asp-for="Age" class="form-control" />
+            <span asp-validation-for="Age" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="CategoryId"></label>
+            <select asp-for="CategoryId" asp-items="Model.Categories" class="form-control">
+                <option value="">-- Select Category --</option>
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PictureName"></label>
+            <input type="file" asp-for="PictureName" class="form-control" onchange="updateImagePreview()" />
+            <span asp-validation-for="PictureName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <img id="previewImage" src="#" alt="Image preview" style="max-height: 200px;" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success">Insert</button>
+    </form>
+
+    <a asp-action="Index">Back to List</a>
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success mt-3" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        function updateImagePreview() {
+            var file = document.getElementById('PictureName').files[0];
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                document.getElementById('previewImage').src = reader.result;
+            }
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                document.getElementById('previewImage').src = "";
+            }
+        }
+        </script>
+
+</div>

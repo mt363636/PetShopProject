@@ -1,0 +1,152 @@
+﻿@model PetShopProject.Models.AdministratorViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Admin Page";
+    int selectedCatId = ViewBag.SelectedCategoryId;
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<div class="d-flex justify-content-center align-items-center flex-column">
+    @Html.AntiForgeryToken()
+
+    <h2>Administrator Page</h2>
+
+    <div class="d-flex justify-content-between align-items-center mt-4" style="width: 100%;">
+        <div style="text-align: left;">
+            <label for="categoryDropdown" style="margin-right: 10px;">Filter by Category:</label>
+            <select id="categoryDropdown" class="category-selection">
+                <option value="0">All Categories</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.CategoryId" selected="@(category.CategoryId == selectedCatId)">
+                        @category.Name
+                    </option>
+                }
+            </select>
+        </div>
+        <div style="text-align: right;">
+            <a href="/Administrator/InsertAnimal" class="btn btn-primary">Add New Animal</a>
+        </div>
+    </div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Animal ID</th>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Category</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var animal in Model.Animals)
+        {
+            <tr>
+                <td>@animal.AnimalId</td>
+                <td>
+                    <img src="~/images/@animal.PictureName" alt="@animal.Name" style="height: 50px; width: 50px; object-fit: cover;">
+                    @animal.Name
+                </td>
+                <td>@animal.Age</td>
+                <td>@Model.Categories.FirstOrDefault(c => c.CategoryId == animal.CategoryId)?.Name</td>
+                    <td>
+                        <span class="description-summary" data-description="@animal.Description">
+                            @Html.Raw(@animal.Description.Substring(0, Math.Min(100, @animal.Description.Length))) @if (@animal.Description.Length > 100)
+                            {
+                                <a href="#" class="expand-description">[...]</a>
+                            }
+                        </span>
+                        <span class="description-full" style="display: none;"></span>
+
+                    </td>
+                    <td>
+                        <a href="/Administrator/EditAnimal/@animal.AnimalId" class="btn btn-primary ">Edit</a>
+                        <a href="#" class="btn btn-danger delete-link" data-animal-id="@animal.AnimalId" onclick="confirmDelete(this)">Delete</a>
+
+
+                    </td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+    <a href="javascript:history.go(-1)" class="btn btn-outline-secondary">Back</a>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".delete-link").on("click", function () {
+                var animalId = $(this).data("animal-id");
+                var confirmation = confirm("Are you sure you want to delete this animal?");
+
+                if (confirmation) {
+                    var formData = new FormData();
+                    formData.append('id', animalId);
+
+                    fetch('/Administrator/DeleteAnimal', {
+                        method: 'POST',
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value, 
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: formData
+                    })
+                        .then(response => {
+                            if (response.ok) {
+                                window.location.href = '/Administrator/Index';
+                            } else {
+                                alert('Error: Unable to delete the animal');
+                            }
+                        });
+                }
+            });
+
+        });
+
+        $(document).ready(function () {
+            var selectedCategoryId = '@ViewBag.CategoryId'; // Get the selected category ID from ViewBag
+            if (selectedCategoryId) {
+                $('#categoryDropdown').val(selectedCategoryId); 
+            }
+
+            $('.category-selection').on('change', function () {
+                var categoryId = $(this).val();
+                window.location.href = '/Administrator/Index?selectedCategoryId=' + categoryId;
+            });
+        });
+        $(document).ready(function () {
+            $(".expand-description").on("click", function (e) {
+                e.preventDefault(); 
+
+                var descriptionSummary = $(this).parent();
+                var descriptionFull = descriptionSummary.siblings(".description-full");
+
+                if (descriptionFull.is(":visible")) {
+                    descriptionFull.hide();
+                    descriptionSummary.show();
+                } else {
+                    var fullDescriptionText = descriptionFull.text();
+                    descriptionSummary.hide();
+                    descriptionFull.text(descriptionSummary.data("description")).show();
+                    descriptionSummary.data("description", fullDescriptionText);
+                }
+            });
+        });
+        setTimeout(function () {
+            $("#successMessage").fadeOut(500); 
+        }, 4000); 
+
+    </script>
+  
+  
+  

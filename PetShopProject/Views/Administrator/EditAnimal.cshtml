@@ -1,0 +1,85 @@
+﻿@model PetShopProject.Models.AnimalEditViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Edit Animal";
+}
+<link rel="stylesheet" href="~/css/LayoutStyles.css">
+<div class="container">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+  
+    <h2>Edit Animal</h2>
+
+    <form asp-action="EditAnimal" asp-controller="Administrator" method="post" enctype="multipart/form-data" onsubmit="return confirmSaveChanges();">
+        <input type="hidden" asp-for="Animal.AnimalId" />
+
+        <div class="form-group">
+            <label asp-for="Animal.Name"></label>
+            <input asp-for="Animal.Name" class="form-control" />
+            <span asp-validation-for="Animal.Name" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Animal.Age"></label>
+            <input asp-for="Animal.Age" class="form-control" />
+            <span asp-validation-for="Animal.Age" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Animal.CategoryId"></label>
+            <select asp-for="Animal.CategoryId" asp-items="Model.Categories" class="form-control">
+                <option value="">-- Select Category --</option>
+            </select>
+            <span asp-validation-for="Animal.CategoryId" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PictureName"></label>
+            <input type="file" asp-for="PictureName" class="form-control" onchange="previewFile()" accept=".jpg,.jpeg" />
+            <span asp-validation-for="PictureName" class="text-danger"></span>
+            <img id="previewImage" src="@Url.Content("~/images/" + Model.Animal.PictureName)" alt="Image Preview" style="max-width: 200px; max-height: 200px;" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Animal.Description"></label>
+            <textarea asp-for="Animal.Description" class="form-control"></textarea>
+            <span asp-validation-for="Animal.Description" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-success">Update</button>
+    </form>
+
+    <a asp-action="Index">Back to List</a>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        function previewFile() {
+            var preview = document.getElementById('previewImage');
+            var file = document.querySelector('input[type=file]').files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                preview.src = reader.result;
+            }
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = "";
+            }
+        }
+        function confirmSaveChanges() {
+            var userConfirmed = confirm('Are you sure you want to save your changes to this animal?');
+
+            if (userConfirmed) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    </script>
+</div>

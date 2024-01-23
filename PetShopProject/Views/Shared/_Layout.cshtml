@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/layout.css">
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid header-section" style="position: relative;">
+
+            <a class="navbar-brand" href="/">
+                <img src="~/images/PetShopLogo1.jpg" alt="PetShopLogo" width="100" height="50">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link custom-btn active" aria-current="page" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link custom-btn" href="/Catalog/CatalogPage" style="font-weight: 700;">Catalog</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link custom-btn" href="/Administrator/Index" style="font-weight: 700;">Administrator</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+
+    <div class="container">
+        @RenderBody()
+    </div>
+
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-4">
+                    <h5>Contact Us</h5>
+                    <p>Martin's PetShop©</p>
+                    <p>Balfour St. 152 , Bat Yam ,Gush dan District, Israel</p>
+                    <p>+(972)-542634305</p>
+                    <p>info@petshopsite.com</p>
+                </div>
+
+                <div class="col-md-4">
+                    <h5>Follow Us</h5>
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a href="https://www.facebook.com" target="_blank"><img src="~/images/facebook.png" alt="Facebook" width="32" height="32"></a></li>
+                        <li class="list-inline-item"><a href="https://www.twitter.com" target="_blank"><img src="~/images/twitter.png" alt="Twitter" width="32" height="32"></a></li>
+                        <li class="list-inline-item"><a href="https://www.instagram.com" target="_blank"><img src="~/images/instagram.png" alt="Instagram" width="32" height="32"></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5>Disclaimer ⚠️</h5>
+                    <p>This is a demo website for educational purposes only. All content and images are fictional and do not represent any real pet shop.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+   
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            var currentUrl = window.location.pathname;
+
+            $('.custom-btn').each(function () {
+                var linkUrl = $(this).attr('href');
+
+                if (currentUrl === linkUrl) {
+                    $(this).addClass('active'); 
+                } else {
+                    $(this).removeClass('active'); 
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
+
+
+
+   
+
+
